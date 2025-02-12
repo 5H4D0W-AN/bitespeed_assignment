@@ -14,7 +14,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "com.bitspeed.assignment")
+@ComponentScan(basePackages = "com.bitespeed.assignment")
 @EnableScheduling
 public class DispatcherConfig implements WebMvcConfigurer {
     @Override

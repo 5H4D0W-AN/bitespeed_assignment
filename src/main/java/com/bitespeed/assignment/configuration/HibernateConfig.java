@@ -25,7 +25,7 @@ public class HibernateConfig {
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("com.bitspeed.assignment");
+        sessionFactory.setPackagesToScan("com.bitespeed.assignment");
         sessionFactory.setHibernateProperties(hibernateProperties());
         sessionFactory.setAnnotatedClasses();
         return sessionFactory;
