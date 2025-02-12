@@ -30,9 +30,11 @@ public class ContactController {
 
     @RequestMapping("/identify")
     @ResponseBody
-    public ResponseEntity<?> identify(@RequestParam("emial") String email,
-                                                   @RequestParam("phoneNumber") String phone){
-
+    public ResponseEntity<?> identify(@RequestParam(value = "email", required = false) String email,
+                                                   @RequestParam(value = "phoneNumber", required = false) String phone){
+        if(email == null && phone == null){
+            return ResponseEntity.ok("Both fields are null.");
+        }
         ContactResponse ret = contactService.identify(email, phone);
         Map<String, ContactResponse> map = new HashMap<>();
         map.put("contact", ret);

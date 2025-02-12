@@ -35,5 +35,6 @@ public class DispatcherConfig implements WebMvcConfigurer {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
     }
+
 }
 

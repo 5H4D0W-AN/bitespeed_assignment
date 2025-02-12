@@ -3,22 +3,22 @@ package com.bitespeed.assignment.models;
 
 
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.annotations.Entity;
+
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "contact")
+@Table(name = "Contact")
 public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String phoneNumber;
-    private String emial;
+    private String email;
     private Long linkedId;
     @NotNull
     private LocalDateTime createdAt;
@@ -53,11 +53,11 @@ public class Contact {
     }
 
     public String getEmial() {
-        return emial;
+        return email;
     }
 
     public void setEmial(String emial) {
-        this.emial = emial;
+        this.email = emial;
     }
 
     public Long getLinkedId() {
