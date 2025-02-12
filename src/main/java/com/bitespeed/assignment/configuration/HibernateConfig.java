@@ -1,7 +1,6 @@
 package com.bitespeed.assignment.configuration;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -21,7 +20,6 @@ import java.util.Properties;
 @ComponentScan(basePackages = "com.bitespeed.assignment")
 @EnableTransactionManagement(proxyTargetClass = true)
 public class HibernateConfig {
-    private static final Logger logger = LogManager.getLogger(HibernateConfig.class.getName());
 
     @Bean(name = "sessionFactory")
     public LocalSessionFactoryBean sessionFactory() {
@@ -52,7 +50,7 @@ public class HibernateConfig {
         try {
             properties.load(input);
         } catch (IOException e) {
-            logger.error(e);
+            e.printStackTrace();
         }
         return properties;
     }
