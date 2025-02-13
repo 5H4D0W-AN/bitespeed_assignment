@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -53,6 +55,21 @@ public class ContactRepoImpl implements ContactRepo {
             Query<Contact> query = session.createQuery(hql, Contact.class);
             return query.getResultList();
         } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    @Transactional
+    public List<Contact> findAllByIds(ArrayList<Long> ids) {
+        try {
+            Session session = getCurrentSession();
+            String hql = "FROM Contact WHERE id IN (:ids)";
+            Query<Contact> query = session.createQuery(hql, Contact.class);
+            query.setParameter("ids", ids);
+            return query.getResultList();
+        }catch (Exception e){
             e.printStackTrace();
             return null;
         }

@@ -34,20 +34,29 @@ public class ContactServiceImpl implements ContactService {
             if(phone != null) phones.add(phone);
             return new ContactResponse(newContact.getId(), emails, phones, new ArrayList<Long>());
         }
-
-        List<Contact> primaryContacts = matches.stream().filter(c->"primary".equals(c.getLinkPrecedence())).collect(Collectors.toList());
+        Set<Long> pcsIds = new HashSet<>();
+        for(Contact c: matches){
+            if(c.getLinkedId() != null){
+                pcsIds.add(c.getLinkedId());
+            }
+            if(c.getLinkPrecedence().equals("primary")){
+                pcsIds.add(c.getId());
+            }
+        }
+        List<Contact> primaryContacts = contactRepo.findAllByIds(new ArrayList<>(pcsIds));
         Collections.sort(primaryContacts, Comparator.comparing(Contact :: getCreatedAt));
+        Contact primary = primaryContacts.get(0);
         int ind = 1;
         while(ind < primaryContacts.size()){
             Contact c = primaryContacts.get(ind++);
             c.setLinkPrecedence("secondary");
             c.setUpdatedAt(LocalDateTime.now());
-            c.setLinkedId(primaryContacts.get(0).getId());
+            c.setLinkedId(primary.getId());
             contactRepo.update(c);
         }
 
 
-        List<Contact> allContacts = contactRepo.findAllByGroup(primaryContacts.get(0).getId());
+        List<Contact> allContacts = contactRepo.findAllByGroup(primary.getId());
 
         Set<String> emails = new HashSet<>();
         Set<String> phones = new HashSet<>();
@@ -65,7 +74,8 @@ public class ContactServiceImpl implements ContactService {
             newContact.setLinkPrecedence("secondary");
             newContact.setCreatedAt(LocalDateTime.now());
             newContact.setUpdatedAt(LocalDateTime.now());
-            newContact.setLinkedId(primaryContacts.get(0).getId());
+            newContact.setLinkedId(primary.getId());
+            allContacts.add(newContact);
             contactRepo.save(newContact);
             if(email != null) emails.add(email);
             if(phone != null) phones.add(phone);
@@ -73,7 +83,7 @@ public class ContactServiceImpl implements ContactService {
         List<String> respEmails = new ArrayList<>();
         List<String> respPhones = new ArrayList<>();
         List<Long> secondaryIds = new ArrayList<>();
-        Contact primary = primaryContacts.get(0);
+
         if(primary.getEmial() != null) respEmails.add(primary.getEmial());
         if(primary.getPhoneNumber() != null) respPhones.add(primary.getPhoneNumber());
         for(Contact c: allContacts){
